@@ -22,7 +22,7 @@ const emit = defineEmits<{
       <RouterLink to="/">
         <Button variant="outline">Home</Button>
       </RouterLink>
-      <Button variant="outline" @click="emit('logout')">Sign out</Button>
+      <Button variant="destructive" @click="emit('logout')">Sign out</Button>
     </div>
   </header>
 </template>

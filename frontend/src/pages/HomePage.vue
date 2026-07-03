@@ -29,7 +29,7 @@ const auth = useAuthStore()
             </p>
           </div>
 
-          <div class="flex flex-col items-center justify-center mt-5 gap-4 sm:flex-row">
+          <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <template v-if="auth.isAuthenticated">
               <RouterLink to="/dashboard">
                 <Button size="lg" class="w-full sm:w-auto">Go to dashboard</Button>
@@ -55,17 +55,17 @@ const auth = useAuthStore()
           </div>
 
           <div class="grid gap-4 pt-6 sm:grid-cols-3">
-            <div class="rounded-2xl border border-white/10 bg-white/5 p-5  ">
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:bg-white/[0.08]">
               <CheckCircle2 class="h-5 w-5 text-emerald-300" />
               <p class="mt-4 text-base font-medium">Task completion</p>
               <p class="mt-2 text-sm leading-6 text-white/65">Mark todo items done with one tap.</p>
             </div>
-            <div class="rounded-2xl border border-white/10 bg-white/5 p-5 ">
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:bg-white/[0.08]">
               <ShieldCheck class="h-5 w-5 text-sky-300" />
               <p class="mt-4 text-base font-medium">Authenticated</p>
               <p class="mt-2 text-sm leading-6 text-white/65">Private lists per signed-in user.</p>
             </div>
-            <div class="rounded-2xl border border-white/10 bg-white/5 p-5 ">
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:bg-white/[0.08]">
               <Sparkles class="h-5 w-5 text-cyan-300" />
               <p class="mt-4 text-base font-medium">Modern UI</p>
               <p class="mt-2 text-sm leading-6 text-white/65">Clean cards, dialog flow, and pagination.</p>
@@ -73,7 +73,43 @@ const auth = useAuthStore()
           </div>
         </section>
 
-     
+        <section class="relative w-full max-w-3xl">
+          <div class="absolute -inset-10 rounded-[2.5rem] bg-cyan-400/10 blur-3xl animate-pulse" />
+          <div class="relative rounded-[2.5rem] border border-white/10 bg-white/8 p-8 shadow-2xl backdrop-blur-xl transition-transform duration-500 hover:scale-[1.01]">
+            <div class="rounded-[2rem] border border-white/10 bg-slate-950/60 p-8">
+              <p class="text-xs uppercase tracking-[0.35em] text-cyan-200/80">Preview</p>
+              <div class="mt-6 space-y-5">
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-5 transition-transform duration-300 hover:-translate-y-1">
+                  <div class="flex items-center justify-between gap-3">
+                    <div>
+                      <p class="text-sm font-medium">Launch landing page redesign</p>
+                      <p class="text-xs text-white/55">In progress</p>
+                    </div>
+                    <span class="rounded-full bg-amber-400/15 px-3 py-1 text-xs text-amber-200">Pending</span>
+                  </div>
+                </div>
+                <div class="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-5 transition-transform duration-300 hover:-translate-y-1">
+                  <div class="flex items-center justify-between gap-3">
+                    <div>
+                      <p class="text-sm font-medium">Build todo modal</p>
+                      <p class="text-xs text-white/55">Completed</p>
+                    </div>
+                    <span class="rounded-full bg-emerald-400/15 px-3 py-1 text-xs text-emerald-200">Done</span>
+                  </div>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-5 transition-transform duration-300 hover:-translate-y-1">
+                  <div class="flex items-center justify-between gap-3">
+                    <div>
+                      <p class="text-sm font-medium">Wire pagination</p>
+                      <p class="text-xs text-white/55">Next up</p>
+                    </div>
+                    <span class="rounded-full bg-sky-400/15 px-3 py-1 text-xs text-sky-200">Queued</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </main>
   </div>
