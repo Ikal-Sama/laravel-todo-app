@@ -1,0 +1,14 @@
+{
+  "typescript.tsdk": "frontend/node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "vue.server.configFilePath": [
+    "frontend/tsconfig.app.json",
+    "frontend/tsconfig.json"
+  ],
+  "vue.server.hybridMode": true,
+  "vetur.enable": false,
+  "vetur.validationScript": false,
+  "vetur.validationTemplate": false,
+  "vetur.validationStyle": false,
+  "vetur.ignoreProjectWarning": true
+}
