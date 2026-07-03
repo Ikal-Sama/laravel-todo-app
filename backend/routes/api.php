@@ -11,6 +11,7 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
 
     Route::prefix('v1')->group(function () {
         Route::apiResource('todos', TodoController::class);
+        Route::patch('todos/{todo}/complete', [TodoController::class, 'complete']);
     });
 });
 

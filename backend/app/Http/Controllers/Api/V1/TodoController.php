@@ -66,6 +66,20 @@ class TodoController extends Controller
     }
 
     /**
+     * Mark the specified todo as completed.
+     */
+    public function complete(Todo $todo): TodoResource
+    {
+        abort_if($todo->user_id !== Auth::id(), Response::HTTP_FORBIDDEN);
+
+        $todo->update([
+            'is_completed' => true,
+        ]);
+
+        return new TodoResource($todo->fresh());
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Todo $todo): JsonResponse

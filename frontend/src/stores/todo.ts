@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { ApiError } from '@/lib/api'
 import {
+  completeTodo,
   createTodo,
   deleteTodo,
   listTodos,
@@ -100,7 +101,17 @@ export const useTodoStore = defineStore('todos', () => {
   }
 
   async function toggleTodo(todo: Todo) {
-    return editTodo(todo.id, { is_completed: !todo.is_completed })
+    const optimistic = { ...todo, is_completed: true }
+    todos.value = todos.value.map((item) => (item.id === todo.id ? optimistic : item))
+
+    try {
+      const updated = await completeTodo(todo.id)
+      todos.value = todos.value.map((item) => (item.id === updated.id ? updated : item))
+      return updated
+    } catch (err) {
+      todos.value = todos.value.map((item) => (item.id === todo.id ? todo : item))
+      throw err
+    }
   }
 
   return {

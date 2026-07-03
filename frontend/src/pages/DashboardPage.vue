@@ -101,6 +101,7 @@ async function toggleTodo(id: number) {
   completionBusyId.value = id
   try {
     await todoStore.toggleTodo(todo)
+    if (editingTodoId.value === id) closeModal()
   } finally {
     completionBusyId.value = null
   }

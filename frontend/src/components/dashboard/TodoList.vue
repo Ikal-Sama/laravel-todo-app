@@ -64,11 +64,18 @@ const emit = defineEmits<{
             </div>
 
             <div class="flex shrink-0 gap-2">
+              <div
+                v-if="todo.is_completed"
+                class="inline-flex h-9 items-center rounded-md border border-emerald-500/20 bg-emerald-500/10 px-3 text-xs font-medium text-emerald-600"
+              >
+                Completed
+              </div>
               <Button
+                v-else
                 size="icon"
                 variant="outline"
                 :disabled="completionBusyId === todo.id"
-                :aria-label="todo.is_completed ? 'Mark todo as not done' : 'Mark todo as done'"
+                aria-label="Mark todo as done"
                 @click="emit('toggle', todo.id)"
               >
                 <Loader2 v-if="completionBusyId === todo.id" class="h-4 w-4 animate-spin" />

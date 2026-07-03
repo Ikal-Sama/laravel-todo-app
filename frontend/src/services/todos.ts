@@ -48,6 +48,12 @@ export function updateTodo(
   })
 }
 
+export function completeTodo(id: number | string): Promise<Todo> {
+  return request<Todo>(`/api/v1/todos/${id}/complete`, {
+    method: 'PATCH',
+  })
+}
+
 export function deleteTodo(id: number | string): Promise<{ message: string }> {
   return request<{ message: string }>(`/api/v1/todos/${id}`, {
     method: 'DELETE',
