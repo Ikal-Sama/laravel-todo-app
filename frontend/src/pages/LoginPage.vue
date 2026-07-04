@@ -7,14 +7,6 @@ import { login as loginRequest } from '@/services/auth'
 import { loginSchema } from '@/lib/validation/schemas'
 import { applyZodToErrors } from '@/lib/validation/useZodErrors'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -29,7 +21,6 @@ const errors = ref<{ email?: string; password?: string; general?: string }>({})
 const submitting = ref(false)
 
 function validate(): boolean {
-  // Reset general; applyZodToErrors clears and repopulates field keys.
   errors.value = { ...errors.value, general: undefined }
   return applyZodToErrors(loginSchema, form, errors)
 }
@@ -70,60 +61,62 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-background p-6">
-    <Card class="w-full max-w-md">
-      <CardHeader>
-        <CardTitle class="text-2xl">Welcome back</CardTitle>
-        <CardDescription>Sign in to your account to continue.</CardDescription>
-      </CardHeader>
+  <div class="relative min-h-screen overflow-hidden bg-[#0b1020] text-white">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.22),_transparent_34%),radial-gradient(circle_at_bottom_right,_rgba(16,185,129,0.18),_transparent_30%),linear-gradient(135deg,_#0b1020_0%,_#111827_55%,_#0f172a_100%)]" />
+    <div class="absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:72px_72px]" />
 
-      <form novalidate @submit.prevent="onSubmit">
-        <CardContent class="space-y-4">
-          <div v-if="errors.general" class="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+    <main class="relative flex min-h-screen items-center justify-center px-6">
+      <div class="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:border-white/15">
+        <div class="mb-8 space-y-1.5 text-center">
+          <h1 class="text-2xl font-semibold tracking-tight">Welcome back</h1>
+          <p class="text-sm text-white/60">Sign in to your account to continue.</p>
+        </div>
+
+        <form novalidate @submit.prevent="onSubmit" class="space-y-5">
+          <div v-if="errors.general" class="rounded-lg border border-red-400/20 bg-red-400/10 px-4 py-2.5 text-sm text-red-300">
             {{ errors.general }}
           </div>
 
           <div class="space-y-1.5">
-            <label for="email" class="text-sm font-medium">Email</label>
+            <label for="email" class="text-sm font-medium text-white/80">Email</label>
             <input
               id="email"
               v-model="form.email"
               type="email"
               autocomplete="email"
               placeholder="you@example.com"
-              class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
-              :class="{ 'border-destructive': errors.email }"
+              class="flex h-10 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-white shadow-sm outline-none transition-all duration-200 placeholder:text-white/35 focus:border-cyan-400/50 focus:bg-white/[0.07] focus:ring-1 focus:ring-cyan-400/30"
+              :class="{ 'border-red-400/50 focus:border-red-400/50 focus:ring-red-400/30': errors.email }"
             />
-            <p v-if="errors.email" class="text-xs text-destructive">{{ errors.email }}</p>
+            <p v-if="errors.email" class="text-xs text-red-300">{{ errors.email }}</p>
           </div>
 
           <div class="space-y-1.5">
-            <label for="password" class="text-sm font-medium">Password</label>
+            <label for="password" class="text-sm font-medium text-white/80">Password</label>
             <input
               id="password"
               v-model="form.password"
               type="password"
               autocomplete="current-password"
               placeholder="••••••••"
-              class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
-              :class="{ 'border-destructive': errors.password }"
+              class="flex h-10 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-white shadow-sm outline-none transition-all duration-200 placeholder:text-white/35 focus:border-cyan-400/50 focus:bg-white/[0.07] focus:ring-1 focus:ring-cyan-400/30"
+              :class="{ 'border-red-400/50 focus:border-red-400/50 focus:ring-red-400/30': errors.password }"
             />
-            <p v-if="errors.password" class="text-xs text-destructive">{{ errors.password }}</p>
+            <p v-if="errors.password" class="text-xs text-red-300">{{ errors.password }}</p>
           </div>
-        </CardContent>
 
-        <CardFooter class="flex flex-col gap-3">
-          <Button type="submit" class="w-full mt-5" :disabled="submitting">
+          <Button type="submit" class="w-full" size="lg" :disabled="submitting">
             {{ submitting ? 'Signing in…' : 'Sign in' }}
           </Button>
-          <p class="text-center text-sm text-muted-foreground">
+
+          <p class="text-center text-sm text-white/50">
             Don&apos;t have an account?
-            <RouterLink to="/register" class="font-medium text-foreground underline-offset-4 hover:underline">
+            <RouterLink to="/register" class="font-medium text-cyan-300 underline-offset-4 transition-colors hover:text-cyan-200 hover:underline">
               Create one
             </RouterLink>
           </p>
-        </CardFooter>
-      </form>
-    </Card>
+        </form>
+      </div>
+    </main>
   </div>
 </template>

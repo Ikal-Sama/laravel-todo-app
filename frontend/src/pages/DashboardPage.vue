@@ -27,58 +27,28 @@ const totalCount = computed(() => todoStore.total)
 const completedCount = computed(() => todoStore.completedCount)
 const notCompletedCount = computed(() => todoStore.notCompletedCount)
 const editingTodo = computed(() =>
-  editingTodoId.value === null
-    ? null
-    : todoStore.todos.find((todo) => todo.id === editingTodoId.value) ?? null,
-)
+  editingTodoId.value === null ? null
+    : todoStore.todos.find((todo) => todo.id === editingTodoId.value) ?? null)
 const paginationPages = computed(() => {
   const pages: number[] = []
   const start = Math.max(1, todoStore.currentPage - 2)
   const end = Math.min(todoStore.lastPage, todoStore.currentPage + 2)
-
-  for (let page = start; page <= end; page += 1) {
-    pages.push(page)
-  }
-
+  for (let page = start; page <= end; page += 1) pages.push(page)
   return pages
 })
 
-function openCreateModal() {
-  editingTodoId.value = null
-  todoText.value = ''
-  formError.value = null
-  isModalOpen.value = true
-}
-
-function closeModal() {
-  isModalOpen.value = false
-  editingTodoId.value = null
-  todoText.value = ''
-  formError.value = null
-}
-
-async function loadTodos(page = todoStore.currentPage) {
-  await todoStore.fetchTodos(page)
-}
+function openCreateModal() { editingTodoId.value = null; todoText.value = ''; formError.value = null; isModalOpen.value = true }
+function closeModal() { isModalOpen.value = false; editingTodoId.value = null; todoText.value = ''; formError.value = null }
+async function loadTodos(page = todoStore.currentPage) { await todoStore.fetchTodos(page) }
 
 async function submitTodo() {
   const text = todoText.value.trim()
-  if (!text) {
-    formError.value = 'Task text is required.'
-    return
-  }
-
+  if (!text) { formError.value = 'Task text is required.'; return }
   formError.value = null
-
   try {
-    if (editingTodoId.value === null) {
-      await todoStore.addTodo({ text })
-    } else {
-      await todoStore.editTodo(editingTodoId.value, { text })
-    }
-
-    closeModal()
-    await loadTodos(todoStore.currentPage)
+    if (editingTodoId.value === null) { await todoStore.addTodo({ text }) }
+    else { await todoStore.editTodo(editingTodoId.value, { text }) }
+    closeModal(); await loadTodos(todoStore.currentPage)
   } catch (err) {
     formError.value = err instanceof ApiError ? err.fieldError('text') ?? err.message : 'Unable to save todo.'
   }
@@ -87,35 +57,21 @@ async function submitTodo() {
 function editTodo(id: number) {
   const todo = todoStore.todos.find((item) => item.id === id)
   if (!todo) return
-
-  editingTodoId.value = id
-  todoText.value = todo.text
-  formError.value = null
-  isModalOpen.value = true
+  editingTodoId.value = id; todoText.value = todo.text; formError.value = null; isModalOpen.value = true
 }
 
 async function toggleTodo(id: number) {
   const todo = todoStore.todos.find((item) => item.id === id)
   if (!todo) return
-
   completionBusyId.value = id
-  try {
-    await todoStore.toggleTodo(todo)
-    if (editingTodoId.value === id) closeModal()
-  } finally {
-    completionBusyId.value = null
-  }
+  try { await todoStore.toggleTodo(todo); if (editingTodoId.value === id) closeModal() }
+  finally { completionBusyId.value = null }
 }
 
 async function removeTodo(id: number) {
   deletingId.value = id
-  try {
-    await todoStore.removeTodo(id)
-    if (editingTodoId.value === id) closeModal()
-    await loadTodos(todoStore.currentPage)
-  } finally {
-    deletingId.value = null
-  }
+  try { await todoStore.removeTodo(id); if (editingTodoId.value === id) closeModal(); await loadTodos(todoStore.currentPage) }
+  finally { deletingId.value = null }
 }
 
 async function goToPage(page: number) {
@@ -124,68 +80,43 @@ async function goToPage(page: number) {
 }
 
 async function onLogout() {
-  try {
-    await logoutRequest()
-  } catch (err) {
-    if (!(err instanceof ApiError)) {
-      // eslint-disable-next-line no-console
-      console.warn('Logout request failed:', err)
-    }
-  } finally {
-    auth.logout()
-    router.push('/login')
-  }
+  try { await logoutRequest() }
+  catch (err) { if (!(err instanceof ApiError)) console.warn('Logout request failed:', err) }
+  finally { auth.logout(); router.push('/login') }
 }
 
-onMounted(async () => {
-  await loadTodos()
-})
-
-watch(editingTodo, (todo) => {
-  if (editingTodoId.value !== null && !todo) closeModal()
-})
+onMounted(async () => { await loadTodos() })
+watch(editingTodo, (todo) => { if (editingTodoId.value !== null && !todo) closeModal() })
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 p-6">
-    <div class="mx-auto flex w-full max-w-5xl flex-col gap-6">
-      <DashboardHeader :user-name="userName" @logout="onLogout" />
+  <div class="relative min-h-screen overflow-hidden bg-[#0b1020] text-white">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.22),_transparent_34%),radial-gradient(circle_at_bottom_right,_rgba(16,185,129,0.18),_transparent_30%),linear-gradient(135deg,_#0b1020_0%,_#111827_55%,_#0f172a_100%)]" />
+    <div class="absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:72px_72px]" />
 
+    <main class="relative mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-6 py-8">
+      <DashboardHeader :user-name="userName" @logout="onLogout" />
       <DashboardStats
         :total-count="totalCount"
         :completed-count="completedCount"
         :not-completed-count="notCompletedCount"
       />
-
       <div class="flex justify-end">
-        <Button @click="openCreateModal">Create todo</Button>
+        <Button class="bg-cyan-500/20 text-cyan-200 hover:bg-cyan-500/30 border-0" @click="openCreateModal">Create todo</Button>
       </div>
-
       <TodoModal
-        :open="isModalOpen"
-        :editing-text="editingTodo?.text ?? null"
-        :is-submitting="todoStore.isSubmitting"
-        v-model="todoText"
-        :error="formError"
-        @submit="submitTodo"
-        @close="closeModal"
+        :open="isModalOpen" :editing-text="editingTodo?.text ?? null"
+        :is-submitting="todoStore.isSubmitting" v-model="todoText"
+        :error="formError" @submit="submitTodo" @close="closeModal"
       />
-
       <TodoList
-        :todos="todoStore.todos"
-        :is-loading="todoStore.isLoading"
-        :error="todoStore.error"
-        :current-page="todoStore.currentPage"
-        :last-page="todoStore.lastPage"
-        :total-count="totalCount"
-        :completion-busy-id="completionBusyId"
-        :deleting-id="deletingId"
+        :todos="todoStore.todos" :is-loading="todoStore.isLoading"
+        :error="todoStore.error" :current-page="todoStore.currentPage"
+        :last-page="todoStore.lastPage" :total-count="totalCount"
+        :completion-busy-id="completionBusyId" :deleting-id="deletingId"
         :pagination-pages="paginationPages"
-        @toggle="toggleTodo"
-        @edit="editTodo"
-        @delete="removeTodo"
-        @page="goToPage"
+        @toggle="toggleTodo" @edit="editTodo" @delete="removeTodo" @page="goToPage"
       />
-    </div>
+    </main>
   </div>
 </template>
